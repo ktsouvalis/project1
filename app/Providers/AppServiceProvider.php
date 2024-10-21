@@ -21,5 +21,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::loadKeysFrom(storage_path());
+        Passport::tokensCan([
+            'manage-posts' => 'Manage Posts',
+        ]);
+        Passport::setDefaultScope([
+            'manage-posts',
+        ]);
     }
 }

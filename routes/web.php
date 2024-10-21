@@ -62,13 +62,13 @@ Route::get('/logout', function(){
 //     return redirect('http://localhost:8000/oauth/authorize?' . $query);
 // })->middleware('auth');
 
-//FOR ANOTHER APP RUNNING ON redirect_uri
-Route::get('/redirect/{client}', function (Request $request, Client $client) {
+// FOR ANOTHER APP RUNNING ON redirect_uri
+Route::get('/redirect/{client}/{scope}', function (Request $request, Client $client, $scope) {
     $query = http_build_query([
         'client_id' => $client->id,
         'redirect_uri' => $client->redirect,
         'response_type' => 'code',
-        'scope' => '',
+        'scope' => $scope,
         'prompt' => 'consent',
     ]);
 
