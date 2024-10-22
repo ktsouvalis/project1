@@ -76,9 +76,9 @@ class PostController extends Controller
      */
     public function show(Request $request, Post $post)
     {
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('view', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN VIEW THE POST
+        // $request_sender = $request->all()['request_sender'];
+        // Auth::login(User::findOrFail($request_sender));
+        // Gate::authorize('view', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN VIEW THE POST
         return response()->json($post);
     }
 
@@ -88,11 +88,14 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $input = $request->input();
-        $request_sender = $input['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('update', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN UPDATE THE POST
+        // $request_sender = $input['request_sender'];
+        // Auth::login(User::findOrFail($request_sender));
+        // Gate::authorize('update', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN UPDATE THE POST
         try{
-            $post->update($input);
+            $post->update([
+                'title'=>$input['title'], 
+                'content'=>$input['content']
+            ]);
         }
         catch(Exception $e){
             Log::error($e->getMessage());
@@ -106,9 +109,9 @@ class PostController extends Controller
      */
     public function destroy(Request $request, Post $post)
     {    
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('delete', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN DELETE THE POST
+        // $request_sender = $request->all()['request_sender'];
+        // Auth::login(User::findOrFail($request_sender));
+        // Gate::authorize('delete', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN DELETE THE POST
         try{
             $post->delete();
         }
