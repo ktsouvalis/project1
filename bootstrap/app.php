@@ -5,6 +5,7 @@ use Laravel\Passport\Http\Middleware\CheckScopes;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Laravel\Passport\Http\Middleware\CheckForAnyScope;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'scopes' => CheckScopes::class,
             'scope' => CheckForAnyScope::class,
+            'client' => CheckClientCredentials::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
