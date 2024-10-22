@@ -13,22 +13,9 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
-    //////////////////FOR PERSONAL ACCESS TOKENS//////////////////////
-    // protected $authenticatedUser;
-
-    // public function __construct()
-    // {
-    //     $this->authenticatedUser = Auth::guard('api')->user();
-    // }
-    /////////////////////////////////////////////////////////////////
-
     public function initializeMiddleware(): void
     {
-        //FOR CLIENT CREDENTIALS TOKENS
         $this->middleware('scope:manage-resources');
-
-        //FOR PERSONAL ACCESS TOKENS
-        // $this->middleware('auth:api');
     }
 
     /**
