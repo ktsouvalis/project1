@@ -232,7 +232,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/posts",
+					"raw": "http://localhost:8000/api/{{post_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -240,7 +240,7 @@
 					"port": "8000",
 					"path": [
 						"api",
-						"posts"
+						"{{post_id}}"
 					]
 				}
 			},
@@ -307,7 +307,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/posts/17",
+					"raw": "http://localhost:8000/api/posts/{{post_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -316,7 +316,7 @@
 					"path": [
 						"api",
 						"posts",
-						"17"
+						"{{post_id}}"
 					]
 				}
 			},
@@ -383,7 +383,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/posts/17",
+					"raw": "http://localhost:8000/api/posts/{{post_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -392,7 +392,7 @@
 					"path": [
 						"api",
 						"posts",
-						"17"
+						"{{post_id}}"
 					]
 				}
 			},
@@ -475,7 +475,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/posts/18",
+					"raw": "http://localhost:8000/api/posts/{{post_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -484,7 +484,7 @@
 					"path": [
 						"api",
 						"posts",
-						"18"
+						"{{post_id}}"
 					]
 				}
 			},
