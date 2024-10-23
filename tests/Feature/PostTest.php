@@ -106,11 +106,8 @@ class PostTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        // Mock Gate authorization
-        // Gate::shouldReceive('authorize')->once()->with('view', $post)->andReturn(true);
-
         // Act: Make a GET request to show the post with the token
-        $response = $this->getJson(route('posts.show', ['post' => $post->id, 'request_sender' => $user->id]), [
+        $response = $this->getJson(route('posts.show', $post), [
             'Authorization' => 'Bearer ' . $this->token,
         ]);
 
@@ -127,11 +124,8 @@ class PostTest extends TestCase
         $post = Post::factory()->create();
         $updatedData = ['title' => 'Updated Post Title', 'content' => 'Updated Post Content'];
 
-        // Mock Gate authorization
-        // Gate::shouldReceive('authorize')->once()->with('update', $post)->andReturn(true);
-
         // Act: Make a PUT request to update the post with the token
-        $response = $this->putJson(route('posts.update', ['post' => $post->id, 'request_sender' => $user->id]), $updatedData, [
+        $response = $this->putJson(route('posts.update', $post), $updatedData, [
             'Authorization' => 'Bearer ' . $this->token,
         ]);
 
@@ -152,7 +146,7 @@ class PostTest extends TestCase
         // Gate::shouldReceive('authorize')->once()->with('delete', $post)->andReturn(true);
 
         // Act: Make a DELETE request to delete the post with the token
-        $response = $this->deleteJson(route('posts.destroy', ['post' => $post->id, 'request_sender' => $user->id]), [], [
+        $response = $this->deleteJson(route('posts.destroy', $post), [], [
             'Authorization' => 'Bearer ' . $this->token,
         ]);
 
