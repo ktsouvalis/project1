@@ -28,31 +28,6 @@ Route::post('/register', function(Request $request){
     return response()->json(['message' => 'User created successfully', 'user'=>$user], 201);
 })->name('register');
 
-
-/////////////////////////////////////////ISSUING PERSONAL ACCESS TOKENS//////////////////////////////////////////////////////
-// Route::post('/login', function (Request $request) {
-//     $credentials = $request->only('email', 'password');
-//     $user = User::where('email', $credentials['email'])->first();
-//     if ($user && Hash::check($credentials['password'], $user->password)) {
-//         $token = $user->createToken('Personal Access Token')->accessToken;
-
-//         return response()->json([
-//             'message' => 'Authenticated',
-//             'token' => $token
-//         ], 200);
-//     }
-//     return response()->json(['message' => 'Unauthenticated'], 401);
-// })->name('login');
-
-
-// Route::get('/posts', [PostController::class, 'index'])
-//     ->middleware('auth:api', );
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:api');
-///////////////////////////////////////// END ISSUING PERSONAL ACCESS TOKENS//////////////////////////////////////////////////////
-
 Route::resource('posts', PostController::class)
     ->middleware('client');
 
