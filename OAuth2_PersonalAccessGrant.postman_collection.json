@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "b7561f5e-2352-44dd-ba1d-b0eda173d38b",
+		"name": "oauth2 PersonalAccessGrant",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39148848"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Angeliki Pountza",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "pountza@sch.gr",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password2}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "pountza@sch.gr",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password2}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Index Posts",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "oMiLSTzHwdZ5YToAcs92Ova1hRQ63A5WZ7i8vV8C",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://127.0.0.1:8000/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://127.0.0.1:8000/oauth/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Store Post",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "oMiLSTzHwdZ5YToAcs92Ova1hRQ63A5WZ7i8vV8C",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://127.0.0.1:8000/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://127.0.0.1:8000/oauth/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Mark Twain said a lot of funny things and one of them is:",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "A lie can travel half way around the world while the truth is putting on its shoes.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Post",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "oMiLSTzHwdZ5YToAcs92Ova1hRQ63A5WZ7i8vV8C",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://127.0.0.1:8000/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://127.0.0.1:8000/oauth/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/posts/17",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"posts",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Post",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "oMiLSTzHwdZ5YToAcs92Ova1hRQ63A5WZ7i8vV8C",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://127.0.0.1:8000/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://127.0.0.1:8000/oauth/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/posts/17",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"posts",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Post",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "oMiLSTzHwdZ5YToAcs92Ova1hRQ63A5WZ7i8vV8C",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://127.0.0.1:8000/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://127.0.0.1:8000/oauth/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Sylvester Stalone said:",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "content",
+							"value": "Playing polo is like trying to play golf during an earthquake",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/posts/18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"posts",
+						"18"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
