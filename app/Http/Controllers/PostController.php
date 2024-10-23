@@ -56,7 +56,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         Gate::authorize('view', $post);
-        return response()->json($post);
+        return response()->json($post, 200);
     }
 
     /**
