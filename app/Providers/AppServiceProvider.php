@@ -33,6 +33,5 @@ class AppServiceProvider extends ServiceProvider
         Passport::setDefaultScope([
             'manage-resources',
         ]);
-        Gate::policy(Post::class, PostPolicy::class);
     }
 }
