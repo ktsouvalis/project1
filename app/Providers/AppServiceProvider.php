@@ -28,10 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Passport::loadKeysFrom(storage_path());
         Passport::tokensCan([
-            'manage-resources' => 'Manage Resources',
+            'manage-posts' => 'Manage Posts',
         ]);
         Passport::setDefaultScope([
-            'manage-resources',
+            'manage-posts',
         ]);
         Gate::policy(Post::class, PostPolicy::class);
     }

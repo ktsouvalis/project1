@@ -13,24 +13,6 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
-    //////////////////FOR PERSONAL ACCESS TOKENS//////////////////////
-    // protected $authenticatedUser;
-
-    // public function __construct()
-    // {
-    //     $this->authenticatedUser = Auth::guard('api')->user();
-    // }
-    /////////////////////////////////////////////////////////////////
-
-    public function initializeMiddleware(): void
-    {
-        //FOR CLIENT CREDENTIALS TOKENS
-        $this->middleware('scope:manage-resources');
-
-        //FOR PERSONAL ACCESS TOKENS
-        // $this->middleware('auth:api');
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -45,10 +27,11 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $input = $request->input();
+        $user = Auth::guard('api')->user();
+        $input['user_id'] = $user->id;
         
         //Rate Limitng
-        $user_id = $input['user_id'];
-        $key = 'store-posts|' . $user_id;
+        $key = 'store-posts|' . $user->id;
 
         if(RateLimiter::tooManyAttempts($key, 5)){
             return response()->json(['message' => 'Too many posts created. Please wait ' . RateLimiter::availableIn($key) . ' seconds before retrying.'], 429);
@@ -58,27 +41,21 @@ class PostController extends Controller
         //End Rate Limiting
         
         try{
-            Post::create($input);
+            $post = Post::create($input);
         }
         catch(Exception $e){
             Log::error($e->getMessage());
             return response()->json(['message' => 'Post creation failed'], 500);
         }
-        return response()->json(['message' => 'Post created successfully'], 201);
+        return response()->json(['message' => 'Post created successfully', 'post'=>$post], 201);
     }
-
-    // WHEN USING CLIENT CREDENTIALS TOKENS, SESSIONS ARE NOT AVAILABLE. 
-    // SO WE NEED TO PSEUDO-LOGIN THE USER THAT SENDED THE REQUEST.
-    // REQUIRES 'request_sender' KEY IN THE REQUEST BODY (as input hidden maybe)
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Post $post)
+    public function show(Post $post)
     {
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('view', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN VIEW THE POST
+        Gate::authorize('view', $post);
         return response()->json($post);
     }
 
@@ -88,9 +65,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $input = $request->input();
-        $request_sender = $input['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('update', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN UPDATE THE POST
+        Gate::authorize('update', $post);
         try{
             $post->update($input);
         }
@@ -98,17 +73,15 @@ class PostController extends Controller
             Log::error($e->getMessage());
             return response()->json(['message' => 'Post update failed'], 500);
         }
-        return response()->json(['message' => 'Post updated successfully'], 200);
+        return response()->json(['message' => 'Post updated successfully', 'post'=>$post], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Post $post)
+    public function destroy(Post $post)
     {    
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('delete', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN DELETE THE POST
+        Gate::authorize('delete', $post);
         try{
             $post->delete();
         }

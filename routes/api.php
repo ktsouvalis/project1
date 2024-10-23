@@ -29,33 +29,32 @@ Route::post('/register', function(Request $request){
 })->name('register');
 
 
-/////////////////////////////////////////ISSUING PERSONAL ACCESS TOKENS//////////////////////////////////////////////////////
-// Route::post('/login', function (Request $request) {
-//     $credentials = $request->only('email', 'password');
-//     $user = User::where('email', $credentials['email'])->first();
-//     if ($user && Hash::check($credentials['password'], $user->password)) {
-//         $token = $user->createToken('Personal Access Token')->accessToken;
 
-//         return response()->json([
-//             'message' => 'Authenticated',
-//             'token' => $token
-//         ], 200);
-//     }
-//     return response()->json(['message' => 'Unauthenticated'], 401);
-// })->name('login');
+Route::post('/login', function (Request $request) {
+    $credentials = $request->only('email', 'password');
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+        // Check for existing valid token
+        $existingToken = $user->tokens()
+            ->where('name', 'Personal Access Token')
+            ->where('revoked', false)
+            ->where('expires_at', '>', now())
+            ->first();
+        if ($existingToken) {
+            return response()->json([
+                'message' => 'Authenticated with old token. COntact administrators to issue new token if needed',
+            ], 200);
+        }
 
+        $token = Auth::user()->createToken('Personal Access Token',['manage-posts'])->accessToken;
+        return response()->json([
+            'message' => 'Authenticated',
+            'token' => $token
+        ], 200);
+    }
+    return response()->json(['message' => 'Unauthenticated'], 401);
+})->name('api-login');
 
-// Route::get('/posts', [PostController::class, 'index'])
-//     ->middleware('auth:api', );
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:api');
-///////////////////////////////////////// END ISSUING PERSONAL ACCESS TOKENS//////////////////////////////////////////////////////
-
-Route::resource('posts', PostController::class)
-    ->middleware('client');
-
-
-
-
+Route::middleware(['auth:api', 'scope:manage-posts'])->group(function () {
+    Route::resource('posts', PostController::class);
+});
