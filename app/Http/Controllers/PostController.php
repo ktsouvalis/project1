@@ -13,22 +13,9 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
-    //////////////////FOR PERSONAL ACCESS TOKENS//////////////////////
-    // protected $authenticatedUser;
-
-    // public function __construct()
-    // {
-    //     $this->authenticatedUser = Auth::guard('api')->user();
-    // }
-    /////////////////////////////////////////////////////////////////
-
     public function initializeMiddleware(): void
     {
-        //FOR CLIENT CREDENTIALS TOKENS
         $this->middleware('scope:manage-resources');
-
-        //FOR PERSONAL ACCESS TOKENS
-        // $this->middleware('auth:api');
     }
 
     /**
@@ -45,7 +32,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $input = $request->input();
-        
+        $input['user_id'] = Auth::guard('api')->id();
         //Rate Limitng
         $user_id = $input['user_id'];
         $key = 'store-posts|' . $user_id;
@@ -67,18 +54,12 @@ class PostController extends Controller
         return response()->json(['message' => 'Post created successfully'], 201);
     }
 
-    // WHEN USING CLIENT CREDENTIALS TOKENS, SESSIONS ARE NOT AVAILABLE. 
-    // SO WE NEED TO PSEUDO-LOGIN THE USER THAT SENDED THE REQUEST.
-    // REQUIRES 'request_sender' KEY IN THE REQUEST BODY (as input hidden maybe)
-
     /**
      * Display the specified resource.
      */
     public function show(Request $request, Post $post)
     {
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('view', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN VIEW THE POST
+        Gate::authorize('view', $post);
         return response()->json($post);
     }
 
@@ -87,12 +68,13 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        Gate::authorize('update', $post);
         $input = $request->input();
-        $request_sender = $input['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('update', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN UPDATE THE POST
         try{
-            $post->update($input);
+            $post->update([
+                'title'=>$input['title'], 
+                'content'=>$input['content']
+            ]);
         }
         catch(Exception $e){
             Log::error($e->getMessage());
@@ -106,9 +88,7 @@ class PostController extends Controller
      */
     public function destroy(Request $request, Post $post)
     {    
-        $request_sender = $request->all()['request_sender'];
-        Auth::login(User::findOrFail($request_sender));
-        Gate::authorize('delete', $post); // CHECK IF THE PSEUDO-LOGGED IN USER CAN DELETE THE POST
+        Gate::authorize('delete', $post);
         try{
             $post->delete();
         }
