@@ -1,0 +1,30 @@
+; php artisan test --coverage
+
+   PASS  Tests\Feature\PostTest
+  ✓ can list all posts                                                                                                                              1.29s  
+  ✓ can create post                                                                                                                                 0.09s  
+  ✓ rate limiting on post creation                                                                                                                  0.11s  
+  ✓ can show post                                                                                                                                   0.10s  
+  ✓ can update post                                                                                                                                 0.10s  
+  ✓ can delete post                                                                                                                                 0.09s  
+  ✓ cannot show post of another user                                                                                                                0.11s  
+  ✓ cannot update post of another user                                                                                                              0.11s  
+  ✓ cannot delete post of another user                                                                                                              0.10s  
+  ✓ create post throws exception                                                                                                                    0.10s  
+  ✓ update post throws exception                                                                                                                    0.11s  
+  ✓ delete post throws exception                                                                                                                    0.10s  
+  ✓ show specific users posts                                                                                                                       0.09s  
+  ✓ show the user of a post                                                                                                                         0.07s  
+
+  Tests:    14 passed (24 assertions)
+  Duration: 2.71s
+
+  Http/Controllers\Controller .............................................................................................100.0%  
+  Http/Controllers\PostController .........................................................................73..75, 88..90 / 78.6%  
+  Models\Post ............................................................................................................ 100.0%  
+  Models\User ............................................................................................................ 100.0%  
+  Policies\PostPolicy .................................................................................................... 100.0%  
+  Providers\AppServiceProvider ........................................................................................... 100.0%  
+  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+                                                                                                                     Total: 87.0 %
+Note: PostController coverage is 78.6% because of the exceptions testing through mocking.

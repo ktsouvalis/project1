@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use Mockery;
+use Exception;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
 use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostTest extends TestCase
@@ -152,5 +155,127 @@ class PostTest extends TestCase
 
         // Assert: Check response
         $response->assertStatus(200);
+    }
+
+    public function test_cannot_show_post_of_another_user(){
+        // Create a post for the authenticated user
+        $post = Post::factory()->create();
+
+        // Create another user
+        $user = User::factory()->create();
+        $another_token = $user->createToken('TestToken', ['manage-posts'])->accessToken;
+
+        // Act: Make a GET request to update the post
+        $response = $this->getJson(route('posts.update', $post), [
+            'Authorization' => 'Bearer ' . $another_token,
+        ]);
+
+        // Assert: Check response
+        $response->assertStatus(403);
+    }
+
+    public function test_cannot_update_post_of_another_user(){
+        // Create a post for the authenticated user
+        $post = Post::factory()->create();
+        // Create another user
+        $user = User::factory()->create();
+        $another_token = $user->createToken('TestToken', ['manage-posts'])->accessToken;
+        // Act: Make a PUT request to update the post
+        $response = $this->putJson(route('posts.update', $post), [], [
+            'Authorization' => 'Bearer ' . $another_token,
+        ]);
+
+        // Assert: Check response
+        $response->assertStatus(403);
+    }
+
+    public function test_cannot_delete_post_of_another_user(){
+        // Create a post for an existing random user
+        $post = Post::factory()->create();
+
+        // Create another user
+        $user = User::factory()->create();
+        $another_token = $user->createToken('TestToken', ['manage-posts'])->accessToken;
+
+        // Act: Make a DELETE request to update the post
+        $response = $this->deleteJson(route('posts.destroy', $post), [], [
+            'Authorization' => 'Bearer ' . $another_token,
+        ]);
+
+        // Assert: Check response
+        $response->assertStatus(403);
+    }
+
+    public function test_create_post_throws_exception()
+    {     
+        //Mocking does not work for the create method of the post model, so we will try to insert invalid data
+        $postData = ['titles' => 'Test Title', 'content' => 'Test Content'];
+
+        $response = $this->postJson(route('posts.store'), $postData, [
+            'Authorization' => 'Bearer ' . $this->token,
+        ]);
+
+        $response->assertStatus(500);
+    }
+
+    public function test_update_post_throws_exception()
+    {
+        // Mock the Post model to throw an exception when trying to update
+        $this->instance(Post::class, Mockery::mock(Post::class, function ($mock) {
+            $mock->shouldReceive('update')->andThrow(new Exception('Post update failed'));
+        }));
+        
+        $post = Post::factory()->create(['user_id' => $this->user->id]);
+        $updatedData = ['title' => 'Updated Title', 'content' => 'Updated Content'];
+
+        $response = $this->putJson(route('posts.update', $post), $updatedData, [
+            'Authorization' => 'Bearer ' . $this->token,
+        ]);
+
+        $response->assertStatus(500);
+    }
+
+    public function test_delete_post_throws_exception()
+    {
+        // Mock the Post model to throw an exception when trying to update
+        $this->instance(Post::class, Mockery::mock(Post::class, function ($mock) {
+            $mock->shouldReceive('destroy')->andThrow(new Exception('Post delete failed'));
+        }));
+        
+        $post = Post::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this->deleteJson(route('posts.update', $post), [], [
+            'Authorization' => 'Bearer ' . $this->token,
+        ]);
+
+        $response->assertStatus(500);
+    }
+
+    public function test_show_specific_users_posts(){
+        // Create posts
+        Post::factory()->count(5)->create(['user_id' => $this->user->id]); 
+        
+        // Act: Make a GET request to update the post
+        $response = $this->user->posts()->get();
+
+        // Assert: Check response content
+        $this->assertCount(5, $response);
+    }
+
+    public function test_show_the_user_of_a_post(){
+        // Create a post for the authenticated user
+        $post = Post::factory()->create(['user_id' => $this->user->id]);
+
+        // Act: Make a GET request to update the post
+        $response = $post->user;
+
+        // Assert: Check response content
+        $this->assertEquals($this->user->id, $response->id);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }
