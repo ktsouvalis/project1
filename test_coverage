@@ -1,0 +1,28 @@
+; php artisan test --coverage
+
+PASS  Tests\Feature\PostTest
+  ✓ can list all posts                                                                                                                              1.21s  
+  ✓ can create post                                                                                                                                 0.09s  
+  ✓ rate limiting on post creation                                                                                                                  0.13s  
+  ✓ can show post                                                                                                                                   0.08s  
+  ✓ can update post                                                                                                                                 0.08s  
+  ✓ can delete post                                                                                                                                 0.09s  
+  ✓ create post throws exception                                                                                                                    0.08s  
+  ✓ update post throws exception                                                                                                                    0.11s  
+  ✓ delete post throws exception                                                                                                                    0.08s  
+  ✓ show specific users posts                                                                                                                       0.09s  
+  ✓ show the user of a post                                                                                                                         0.09s  
+
+  Tests:    11 passed (22 assertions)
+  Duration: 2.28s
+
+  Http/Controllers\Controller .............................................................................................100.0%  
+  Http/Controllers\PostController .............................................................18, 50..52, 77..79, 93..95 / 64.3%  
+  Models\Post ............................................................................................................ 100.0%  
+  Models\User ............................................................................................................ 100.0%  
+  Providers\AppServiceProvider ........................................................................................... 100.0%  
+  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  
+                                                                                                                     Total: 76.2 % 
+
+; Note: The coverage of PostController is low because of the mocking methods of testing (however, the tests passed) 
+; and the manage-resources scope middleware.
